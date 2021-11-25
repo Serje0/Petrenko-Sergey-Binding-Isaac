@@ -1,20 +1,3 @@
-{
-    "name": "Unity.Nuget.NewtonsoftJson.EditorTests",
-    "references": [],
-    "optionalUnityReferences": [
-        "TestAssemblies"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": true,
-    "precompiledReferences": [
-        "Newtonsoft.Json.dll"
-    ],
-    "autoReferenced": true,
-    "defineConstraints": [
-        "UNITY_INCLUDE_TESTS"
-    ]
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:de6205e3f5f0f9797dc657a96dd25558f714e8a86f85355050ee0fb145e158ee
+size 462

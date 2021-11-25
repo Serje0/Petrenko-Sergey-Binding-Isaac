@@ -1,13 +1,3 @@
-fileFormatVersion: 2
-guid: f62c9c65cf3354c93be831c8bc075510
-MonoImporter:
-  externalObjects: {}
-  serializedVersion: 2
-  defaultReferences:
-  - m_Shader: {instanceID: 0}
-  - m_BlueNoise: {fileID: 2800000, guid: cbdfedcb32329429aae80014a0d36ad9, type: 3}
-  executionOrder: 0
-  icon: {instanceID: 0}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+version https://git-lfs.github.com/spec/v1
+oid sha256:41a6cf6bc9c14c559f54bb98888387769a7c39da788b0b17b2185acefa8d889f
+size 354

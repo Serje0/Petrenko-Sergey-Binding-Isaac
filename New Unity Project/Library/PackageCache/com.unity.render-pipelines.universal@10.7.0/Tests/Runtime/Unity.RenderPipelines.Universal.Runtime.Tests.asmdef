@@ -1,20 +1,3 @@
-{
-    "name": "Unity.RenderPipelines.Universal.Runtime.Tests",
-    "references": [
-        "GUID:15fc0a57446b3144c949da3e2b9737a9",
-        "GUID:27619889b8ba8c24980f49ee34dbb44a",
-        "GUID:0acc523941302664db1f4e527237feb3"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": true,
-    "overrideReferences": true,
-    "precompiledReferences": [
-        "nunit.framework.dll"
-    ],
-    "autoReferenced": false,
-    "defineConstraints": [
-        "UNITY_INCLUDE_TESTS"
-    ],
-    "versionDefines": []
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:422f273e60ae25df790d58b3861f208bf60cb9947cd17df5ae05e5f100e47a48
+size 540
