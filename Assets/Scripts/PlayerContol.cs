@@ -1,4 +1,5 @@
-using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerContol : MonoBehaviour
@@ -36,8 +37,8 @@ public class PlayerContol : MonoBehaviour
         float speedX, speedY;
         if (((ShootX != 0 && ShootY == 0) || (ShootX == 0 && ShootY != 0)) && Time.time > LastTimeShoot + DelayShoot)
         {
-            GameObject Shoot_dub = Instantiate(Shoot, transform.position, transform.rotation);
-            Shoot_dub.AddComponent<Rigidbody2D>().gravityScale = 0;
+            GameObject Shoot_clone = Instantiate(Shoot, transform.position, transform.rotation) as GameObject;
+            Shoot_clone.AddComponent<Rigidbody2D>().gravityScale = 0;
             if (ShootX < 0)
             {
                 speedX = Mathf.Floor(ShootX) * speed_shoot;
@@ -54,7 +55,7 @@ public class PlayerContol : MonoBehaviour
             {
                 speedY = Mathf.Ceil(ShootY) * speed_shoot;
             }
-            Shoot_dub.GetComponent<Rigidbody2D>().velocity = new Vector2(speedX, speedY);
+            Shoot_clone.GetComponent<Rigidbody2D>().velocity = new Vector2(speedX, speedY);
             LastTimeShoot = Time.time;
         }
     }
