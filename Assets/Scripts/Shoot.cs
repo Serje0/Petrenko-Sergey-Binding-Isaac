@@ -8,11 +8,7 @@ public class Shoot : MonoBehaviour
 
     void Start()
     {
-        //условия расположение объекта, т.е. не удалять первоначального объекта
-        if (gameObject.transform.position.x != 0 || gameObject.transform.position.y != 0 || gameObject.transform.position.z != 1)  
-        {
-            StartCoroutine(FinishShoot());
-        }
+        StartCoroutine(FinishShoot());
     }
     void Update()
     {
