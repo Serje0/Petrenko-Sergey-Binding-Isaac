@@ -17,17 +17,4 @@ public class Room : MonoBehaviour
     public GameObject ColliderDown;
     public GameObject ColliderLeft;
     public GameObject ColliderRight;
-    void Start()
-    {
-
-    }
-    void Update()
-    {
-        
-    }
-
-    public void DeleteRoom()
-    {
-        Destroy(gameObject);  //удаление объекта
-    }
 }

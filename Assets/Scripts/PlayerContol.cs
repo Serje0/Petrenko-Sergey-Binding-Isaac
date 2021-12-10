@@ -50,6 +50,7 @@ public class PlayerContol : MonoBehaviour
             if (ShootY < 0)
             {
                 speedY = Mathf.Floor(ShootY) * speed_shoot;
+                Shoot_clone.transform.position = new Vector2(Shoot_clone.transform.position.x, Shoot_clone.transform.position.y - 0.15f);
             }
             else
             {

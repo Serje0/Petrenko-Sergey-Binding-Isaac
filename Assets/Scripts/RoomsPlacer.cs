@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class RoomsPlacer : MonoBehaviour
 {
@@ -11,21 +13,33 @@ public class RoomsPlacer : MonoBehaviour
     private Room[,] SpawnedRooms;
     private float WidthRoom = 4.6f;
     private float HeightRoom = 3.1f;
-    
-    void Start()
+
+    public void Start()
     {
         SpawnedRooms = new Room[22, 22];
-        StartRoom = Instantiate(StartRoom);
-        StartRoom.transform.position = new Vector2(0,0);
-        SpawnedRooms[11, 11] = StartRoom;
+
+        Room Start = Instantiate(StartRoom);
+        Start.transform.position = new Vector2(0, 0);
+        SpawnedRooms[11, 11] = Start;
 
         for (int i = 0; i < 8; i++)
         {
             PlaceOneRoom();
         }
+
         PlaceRoomBoss();
     }
-    
+
+    public void Delete()
+    {
+        GameObject[] obj = GameObject.FindGameObjectsWithTag("Room");
+
+        for (int i = 0; i < 10; i++)
+        {
+            Destroy(obj[i]);
+        }
+    }
+
     void PlaceOneRoom()
     {
         HashSet<Vector2Int> vacantPlaces = new HashSet<Vector2Int>();
@@ -45,17 +59,17 @@ public class RoomsPlacer : MonoBehaviour
                 {
                     vacantPlaces.Add(new Vector2Int(X - 1, Y));
                 }
-                
+
                 if (Y > 0 && SpawnedRooms[X, Y - 1] == null)
                 {
                     vacantPlaces.Add(new Vector2Int(X, Y - 1));
                 }
-                
+
                 if (X < MaxX && SpawnedRooms[X + 1, Y] == null)
                 {
                     vacantPlaces.Add(new Vector2Int(X + 1, Y));
                 }
-                
+
                 if (Y < MaxY && SpawnedRooms[X, Y + 1] == null)
                 {
                     vacantPlaces.Add(new Vector2Int(X, Y + 1));
@@ -70,11 +84,12 @@ public class RoomsPlacer : MonoBehaviour
             Vector2Int Position = vacantPlaces.ElementAt(Random.Range(0, vacantPlaces.Count));
             if (DoorInRoom(newRoom, Position))
             {
-                newRoom.transform.position = new Vector2((Position.x - 11)* WidthRoom, (Position.y - 11) * HeightRoom);
+                newRoom.transform.position = new Vector2((Position.x - 11) * WidthRoom, (Position.y - 11) * HeightRoom);
                 SpawnedRooms[Position.x, Position.y] = newRoom;
                 break;
             }
         }
+
     }
 
     int ManyRoomNull(int X, int Y)
@@ -95,6 +110,7 @@ public class RoomsPlacer : MonoBehaviour
             if (SpawnedRooms[X + 1, Y] == null) many++;
             if (SpawnedRooms[X - 1, Y] == null) many++;
         }
+
         if (Y == 0)
         {
             many++;
@@ -110,6 +126,7 @@ public class RoomsPlacer : MonoBehaviour
             if (SpawnedRooms[X, Y + 1] == null) many++;
             if (SpawnedRooms[X, Y - 1] == null) many++;
         }
+
         if (X != 0 && Y != 0 && X != SpawnedRooms.GetLength(0) - 1 && Y != SpawnedRooms.GetLength(1) - 1)
         {
             if (SpawnedRooms[X - 1, Y] == null) many++;
@@ -117,9 +134,10 @@ public class RoomsPlacer : MonoBehaviour
             if (SpawnedRooms[X + 1, Y] == null) many++;
             if (SpawnedRooms[X, Y + 1] == null) many++;
         }
+
         return many;
     }
-    
+
     void PlaceRoomBoss()
     {
         HashSet<Vector2Int> vacantPlaces = new HashSet<Vector2Int>();
@@ -190,18 +208,21 @@ public class RoomsPlacer : MonoBehaviour
         if (vacantPlaces.Count != 0)
         {
             Room newRoom = Instantiate(BossRoom);
+
             int limit = 500;
             while (limit-- > 0)
             {
                 Vector2Int Position = vacantPlaces.ElementAt(Random.Range(0, vacantPlaces.Count));
                 if (DoorInRoom(newRoom, Position))
                 {
-                    newRoom.transform.position = new Vector2((Position.x - 11) * WidthRoom, (Position.y - 11) * HeightRoom);
+                    newRoom.transform.position =
+                        new Vector2((Position.x - 11) * WidthRoom, (Position.y - 11) * HeightRoom);
                     SpawnedRooms[Position.x, Position.y] = newRoom;
                     return;
                 }
             }
         }
+
     }
 
     private bool DoorInRoom(Room room, Vector2Int vect)
@@ -213,13 +234,17 @@ public class RoomsPlacer : MonoBehaviour
 
         if (room.DoorBoss)
         {
-            if (room.DoorBossUp != null && vect.y < MaxY && SpawnedRooms[vect.x, vect.y + 1]?.DoorBossDown != null) neighbours.Add(Vector2Int.up);
-            if (room.DoorBossDown != null && vect.y > 0 && SpawnedRooms[vect.x, vect.y - 1]?.DoorBossUp != null) neighbours.Add(Vector2Int.down);
-            if (room.DoorBossRight != null && vect.x < MaxX && SpawnedRooms[vect.x + 1, vect.y]?.DoorBossLeft != null) neighbours.Add(Vector2Int.right);
-            if (room.DoorBossLeft != null && vect.x > 0 && SpawnedRooms[vect.x - 1, vect.y]?.DoorBossRight != null) neighbours.Add(Vector2Int.left);
-            
+            if (room.DoorBossUp != null && vect.y < MaxY && SpawnedRooms[vect.x, vect.y + 1]?.DoorBossDown != null)
+                neighbours.Add(Vector2Int.up);
+            if (room.DoorBossDown != null && vect.y > 0 && SpawnedRooms[vect.x, vect.y - 1]?.DoorBossUp != null)
+                neighbours.Add(Vector2Int.down);
+            if (room.DoorBossRight != null && vect.x < MaxX && SpawnedRooms[vect.x + 1, vect.y]?.DoorBossLeft != null)
+                neighbours.Add(Vector2Int.right);
+            if (room.DoorBossLeft != null && vect.x > 0 && SpawnedRooms[vect.x - 1, vect.y]?.DoorBossRight != null)
+                neighbours.Add(Vector2Int.left);
+
             if (neighbours.Count == 0) return false;
-        
+
             Vector2Int SelectedDiverc = neighbours[Random.Range(0, neighbours.Count)];
             Room SelectedRoom = SpawnedRooms[vect.x + SelectedDiverc.x, vect.y + SelectedDiverc.y];
 
@@ -254,14 +279,18 @@ public class RoomsPlacer : MonoBehaviour
         }
         else
         {
-            if (room.DoorUp != null && vect.y < MaxY && SpawnedRooms[vect.x, vect.y + 1]?.DoorDown != null) neighbours.Add(Vector2Int.up);
-            if (room.DoorDown != null && vect.y > 0 && SpawnedRooms[vect.x, vect.y - 1]?.DoorUp != null) neighbours.Add(Vector2Int.down);
-            if (room.DoorRight != null && vect.x < MaxX && SpawnedRooms[vect.x + 1, vect.y]?.DoorLeft != null) neighbours.Add(Vector2Int.right);
-            if (room.DoorLeft != null && vect.x > 0 && SpawnedRooms[vect.x - 1, vect.y]?.DoorRight != null) neighbours.Add(Vector2Int.left);
-        
-        
+            if (room.DoorUp != null && vect.y < MaxY && SpawnedRooms[vect.x, vect.y + 1]?.DoorDown != null)
+                neighbours.Add(Vector2Int.up);
+            if (room.DoorDown != null && vect.y > 0 && SpawnedRooms[vect.x, vect.y - 1]?.DoorUp != null)
+                neighbours.Add(Vector2Int.down);
+            if (room.DoorRight != null && vect.x < MaxX && SpawnedRooms[vect.x + 1, vect.y]?.DoorLeft != null)
+                neighbours.Add(Vector2Int.right);
+            if (room.DoorLeft != null && vect.x > 0 && SpawnedRooms[vect.x - 1, vect.y]?.DoorRight != null)
+                neighbours.Add(Vector2Int.left);
+
+
             if (neighbours.Count == 0) return false;
-        
+
             Vector2Int SelectedDiverc = neighbours[Random.Range(0, neighbours.Count)];
             Room SelectedRoom = SpawnedRooms[vect.x + SelectedDiverc.x, vect.y + SelectedDiverc.y];
 
@@ -294,7 +323,7 @@ public class RoomsPlacer : MonoBehaviour
                 SelectedRoom.ColliderRight.SetActive(false);
             }
         }
-     
+
         return true;
     }
 }

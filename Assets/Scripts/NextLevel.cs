@@ -4,26 +4,23 @@ using UnityEngine;
 
 public class NextLevel : MonoBehaviour
 {
-    public Room[] rooms;
-    public GameObject Player;
+    public RoomsPlacer rooms;
     private UnityEngine.Camera camera;
+    public bool DeleteRoom = true;
     void Start()
     {
         camera = Camera.main.GetComponent<Camera>();
     }
 
 
-    private IEnumerator OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
             other.transform.position = new Vector2(0, 0);
             camera.transform.position = new Vector2(0, 0);
-            foreach (Room room in rooms)
-            {
-                room.DeleteRoom();
-                yield return new WaitForSeconds(1);
-            }
+            rooms.Delete();
+            rooms.Start();
         }
     }
 }
