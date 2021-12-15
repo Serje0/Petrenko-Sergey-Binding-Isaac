@@ -11,8 +11,19 @@ public class Damage : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Health = GameObject.Find("Canvas/Health").gameObject.GetComponent<Slider>();
-            Health.value -= 1;
-            yield return new WaitForSeconds(1.0f);
+            if (Health.value > 0.5f)
+            {
+                Health = GameObject.Find("Canvas/Health").gameObject.GetComponent<Slider>();
+                Health.value -= 0.5f;
+                yield return new WaitForSeconds(1);
+            }
+            else
+            {
+                Health.value = 0;
+                Destroy(GameObject.FindWithTag("Player"));
+                GameObject.FindWithTag("Dead").SetActive(true);
+                yield return new WaitForSeconds(1);
+            }
         }
     }
 }

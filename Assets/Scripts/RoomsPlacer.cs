@@ -10,18 +10,27 @@ public class RoomsPlacer : MonoBehaviour
     public Room[] Rooms;
     public Room StartRoom;
     public Room BossRoom;
-    private Room[,] SpawnedRooms;
+    public Room[,] SpawnedRooms;
     private float WidthRoom = 4.6f;
     private float HeightRoom = 3.1f;
+    private int X_room = 11;
+    private int Y_room = 11;
 
-    public void Start()
+    private void Start()
     {
         SpawnedRooms = new Room[22, 22];
+        /*for (int X = 0; X < SpawnedRooms.GetLength(0); X++)
+        {
+            for (int Y = 0; Y < SpawnedRooms.GetLength(1); Y++)
+            {
+                SpawnedRooms[X, Y] = null;
+            }
+        }*/
 
-        Room Start = Instantiate(StartRoom);
+        Room Start = Instantiate(StartRoom);  //Создание стартого комнаты
         Start.transform.position = new Vector2(0, 0);
         SpawnedRooms[11, 11] = Start;
-
+        
         for (int i = 0; i < 8; i++)
         {
             PlaceOneRoom();
@@ -30,7 +39,85 @@ public class RoomsPlacer : MonoBehaviour
         PlaceRoomBoss();
     }
 
-    public void Delete()
+    void Update()
+    {
+        UnityEngine.Camera camera = Camera.main.GetComponent<Camera>();
+        
+        int X1 = 11 + (int)(camera.transform.position.x / WidthRoom);
+        int Y1 = 11 + (int)(camera.transform.position.y / HeightRoom);
+
+        /*Debug.Log(X_room);
+        Debug.Log(Y_room);
+        Debug.Log(SpawnedRooms[X_room, Y_room]);*/
+
+        if (X1 == 11 && Y1 == 11)
+        {
+            X_room = X1;
+            Y_room = Y1;
+        }
+        
+        if ((X1 != 11 || Y1 != 11) && ((X1 != X_room) || (Y1 != Y_room)))   //При входа комнаты появляются мобы
+        {
+            X_room = X1;
+            Y_room = Y1;
+            
+            if (SpawnedRooms[X_room, Y_room].Enemy1 != null) { SpawnedRooms[X_room, Y_room].Enemy1.SetActive(true); }
+            if (SpawnedRooms[X_room, Y_room].Enemy2 != null) { SpawnedRooms[X_room, Y_room].Enemy2.SetActive(true); }
+            if (SpawnedRooms[X_room, Y_room].Enemy3 != null) { SpawnedRooms[X_room, Y_room].Enemy3.SetActive(true); }
+            if (SpawnedRooms[X_room, Y_room].Enemy4 != null) { SpawnedRooms[X_room, Y_room].Enemy4.SetActive(true); }
+
+            //Debug.Log(SpawnedRooms[X_room, Y_room].Enemy1.activeInHierarchy);
+
+        }
+        
+        GameObject[] ManyEnemy = GameObject.FindGameObjectsWithTag("Enemy");  //Массив мобов
+
+        //Debug.Log(ManyEnemy.Length);
+        /*Debug.Log(ManyEnemy.Length);
+        Debug.Log(!SpawnedRooms[X_room, Y_room].Enemy1.activeInHierarchy || !SpawnedRooms[X_room, Y_room].Enemy2.activeInHierarchy || !SpawnedRooms[X_room, Y_room].Enemy3.activeInHierarchy || !SpawnedRooms[X_room, Y_room].Enemy4.activeInHierarchy);
+        Debug.Log((!SpawnedRooms[X_room, Y_room].Enemy1.activeInHierarchy || !SpawnedRooms[X_room, Y_room].Enemy2.activeInHierarchy || !SpawnedRooms[X_room, Y_room].Enemy3.activeInHierarchy || !SpawnedRooms[X_room, Y_room].Enemy4.activeInHierarchy) && (ManyEnemy.Length != 0));
+        */
+        if (((SpawnedRooms[X_room, Y_room].Enemy1 != null && SpawnedRooms[X_room, Y_room].Enemy1.activeInHierarchy) || 
+             (SpawnedRooms[X_room, Y_room].Enemy2 != null && SpawnedRooms[X_room, Y_room].Enemy2.activeInHierarchy) || 
+             (SpawnedRooms[X_room, Y_room].Enemy3 != null && SpawnedRooms[X_room, Y_room].Enemy3.activeInHierarchy) ||
+             (SpawnedRooms[X_room, Y_room].Enemy4 != null && SpawnedRooms[X_room, Y_room].Enemy4.activeInHierarchy)) && (ManyEnemy.Length != 0))   //Закрытие дверей
+        {
+            if(SpawnedRooms[X_room, Y_room].DoorUp != null && SpawnedRooms[X_room, Y_room].DoorUp.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorUp.SetActive(true);} 
+            if(SpawnedRooms[X_room, Y_room].DoorDown != null && SpawnedRooms[X_room, Y_room].DoorDown.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorDown.SetActive(true);}
+            if(SpawnedRooms[X_room, Y_room].DoorLeft != null && SpawnedRooms[X_room, Y_room].DoorLeft.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorLeft.SetActive(true);}
+            if(SpawnedRooms[X_room, Y_room].DoorRight != null && SpawnedRooms[X_room, Y_room].DoorRight.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorRight.SetActive(true);}
+                
+            if(SpawnedRooms[X_room, Y_room].DoorBossUp != null && SpawnedRooms[X_room, Y_room].DoorBossUp.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorBossUp.SetActive(true);}
+            if(SpawnedRooms[X_room, Y_room].DoorBossDown != null && SpawnedRooms[X_room, Y_room].DoorBossDown.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorBossDown.SetActive(true);}
+            if(SpawnedRooms[X_room, Y_room].DoorBossLeft != null && SpawnedRooms[X_room, Y_room].DoorBossLeft.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorBossLeft.SetActive(true);}
+            if(SpawnedRooms[X_room, Y_room].DoorBossRight != null && SpawnedRooms[X_room, Y_room].DoorBossRight.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorBossRight.SetActive(true);}
+
+            if (SpawnedRooms[X_room, Y_room].CloseNextDoor != null)
+            {
+                SpawnedRooms[X_room, Y_room].CloseNextDoor.SetActive(true);
+                SpawnedRooms[X_room, Y_room].NextDoor.SetActive(false);
+            }
+        }
+        else
+        {
+            if(SpawnedRooms[X_room, Y_room].DoorUp != null && SpawnedRooms[X_room, Y_room].DoorUp.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorUp.SetActive(false);} 
+            if(SpawnedRooms[X_room, Y_room].DoorDown != null && SpawnedRooms[X_room, Y_room].DoorDown.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorDown.SetActive(false);}
+            if(SpawnedRooms[X_room, Y_room].DoorLeft != null && SpawnedRooms[X_room, Y_room].DoorLeft.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorLeft.SetActive(false);}
+            if(SpawnedRooms[X_room, Y_room].DoorRight != null && SpawnedRooms[X_room, Y_room].DoorRight.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorRight.SetActive(false);}
+                
+            if(SpawnedRooms[X_room, Y_room].DoorBossUp != null && SpawnedRooms[X_room, Y_room].DoorBossUp.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorBossUp.SetActive(false);}
+            if(SpawnedRooms[X_room, Y_room].DoorBossDown != null && SpawnedRooms[X_room, Y_room].DoorBossDown.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorBossDown.SetActive(false);}
+            if(SpawnedRooms[X_room, Y_room].DoorBossLeft != null && SpawnedRooms[X_room, Y_room].DoorBossLeft.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorBossLeft.SetActive(false);}
+            if(SpawnedRooms[X_room, Y_room].DoorBossRight != null && SpawnedRooms[X_room, Y_room].DoorBossRight.activeInHierarchy) {SpawnedRooms[X_room, Y_room].CloseDoorBossRight.SetActive(false);}
+
+            if (SpawnedRooms[X_room, Y_room].CloseNextDoor != null)
+            {
+                SpawnedRooms[X_room, Y_room].NextDoor.SetActive(true);
+            }
+        }
+        ManyEnemy = new GameObject[0];
+    }
+    public void Delete()  //Удаление комнаты
     {
         GameObject[] obj = GameObject.FindGameObjectsWithTag("Room");
 
@@ -40,7 +127,7 @@ public class RoomsPlacer : MonoBehaviour
         }
     }
 
-    void PlaceOneRoom()
+    void PlaceOneRoom()  //Создание комнаты
     {
         HashSet<Vector2Int> vacantPlaces = new HashSet<Vector2Int>();
         for (int X = 0; X < SpawnedRooms.GetLength(0); X++)
@@ -138,7 +225,7 @@ public class RoomsPlacer : MonoBehaviour
         return many;
     }
 
-    void PlaceRoomBoss()
+    void PlaceRoomBoss()  //Создание комнаты босса
     {
         HashSet<Vector2Int> vacantPlaces = new HashSet<Vector2Int>();
         for (int X = 0; X < SpawnedRooms.GetLength(0); X++)

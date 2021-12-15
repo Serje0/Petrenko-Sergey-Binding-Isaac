@@ -20,6 +20,8 @@ public class CameraRoom : MonoBehaviour
         {
             other.transform.position += PlayerPos;
             camera.transform.position += CameraPos;
-        }
+            //Debug.Log(placer.SpawnedRooms[11, 11].name);
+            //placer.SpawnedRooms[11, 11].Enemy.SetActive(true);
+        }       
     }
 }
